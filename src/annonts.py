@@ -11,6 +11,11 @@ import ast
 import numpy as np
 import pandas as pd
 
+import logging
+from logging import config
+config.fileConfig('logger.ini')
+logger = logging.getLogger(__name__)
+
 class airbus_clean_otd:
     """Functions to clean airbus data"""
     @staticmethod
@@ -50,6 +55,43 @@ class airbus_clean_otd:
         self.labels.loc[:,'width'] = self.labels.loc[:,'bounds'].apply(self.getWidth)
         self.labels.loc[:,'height'] = self.labels.loc[:,'bounds'].apply(self.getHeight)
         self.labels.at[:,'aspect_ratio'] = self.labels[['height', 'width']].max(axis=1) / self.labels[['height', 'width']].min(axis=1)
-        return self.labels
+        logger.info("Descriotion o the lables are as follows:")
+        logger.info(f'{self.labels.describe()}')
+
+        self.analysis = '''
+        The analysis of the data provides some insights. 
+        Bounding boxes are mostly squares with a mean size of 23 pixels i.e. 35 meters. 
+        Some aspect ratios are strange either too small or too big. 
+        We want to clean this by removing bounding boxes 
+        that are too small (height or width under 5 pixels) or with large aspect ratio (over 2.5).  
+        '''
+        logger.info(f'{self.analysis}')
     
-    def clean
+    def clean_annots(self)-> None:
+        # parameters to clean data
+        keep_tags_wt_width_over_px = 5
+        keep_tags_wt_height_over_px = 5
+        bb_aspect_ratio_upper_limit =  2.5
+        
+        # remove null values
+        safe_labels = self.labels[(np.isfinite(self.labels['aspect_ratio'])) & self.labels['aspect_ratio'].notnull()]
+
+        # remove very small pixels
+        filter_too_small = np.logical_or(safe_labels['width'] < keep_tags_wt_width_over_px, safe_labels['height'] < keep_tags_wt_width_over_px)
+        logger.info(f"Removed {sum(filter_too_small)}, records which are too small.")
+
+        # remove weird aspect ratio
+        filter_ratio_too_high = safe_labels['aspect_ratio'] > bb_aspect_ratio_upper_limit
+        logger.info(f"Removed {sum(filter_ratio_too_high)}, records which have a unusual aspect ratio.")
+
+        cleaned_labels = safe_labels[np.logical_not(np.logical_or(filter_too_small,filter_ratio_too_high))]
+
+        # inspect the values
+        logger.info("After cleaning the labels are as follows")
+        logger.info(f"{cleaned_labels.describe()}")     
+
+if __name__ == "__main__":
+    airbus_dataset_path = '/home/vardh/apps/tmp/airbus/'
+    pd = airbus_clean_otd(airbus_dataset_path)
+    pd.annots_pd()
+    pd.clean_annots()
