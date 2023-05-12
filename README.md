@@ -1,2 +1,1 @@
-# airbus-ml
-ML models for Object Detection on Airbus data
+# ML models for Object Detection on Airbus data
