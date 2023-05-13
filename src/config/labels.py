@@ -55,9 +55,8 @@ class airbus_clean_otd:
         self.labels.loc[:,'width'] = self.labels.loc[:,'bounds'].apply(self.getWidth)
         self.labels.loc[:,'height'] = self.labels.loc[:,'bounds'].apply(self.getHeight)
         self.labels.at[:,'aspect_ratio'] = self.labels[['height', 'width']].max(axis=1) / self.labels[['height', 'width']].min(axis=1)
-        logger.info("Descriotion o the lables are as follows:")
+        logger.info("Description of the labels are as follows:")
         logger.info(f'{self.labels.describe()}')
-        return self.labels
 
         self.analysis = '''
         The analysis of the data provides some insights. 

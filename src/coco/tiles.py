@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 TILE_WIDTH = 640
 TILE_HEIGHT = 640
 TILE_OVERLAP = 64
-TRUNCATED_PERCENT = 0.3
 _overwriteFiles = True
 
 ann_nb = 0
@@ -26,26 +25,6 @@ img_nb = 0
 
 class tiling_data:
     """Tiling large images into small patches"""
-    @staticmethod
-    # Return one tuple for each tag found inside the tile
-    def annot_is_inside_tile(bounds, x_start, y_start, width, height, truncated_percent):
-        x_min, y_min, x_max, y_max = bounds
-        x_min, y_min, x_max, y_max = x_min - x_start, y_min - y_start, x_max - x_start, y_max - y_start
-
-        if (x_min > width) or (x_max < 0.0) or (y_min > height) or (y_max < 0.0):
-            return None
-        
-        x_max_trunc = min(x_max, width) 
-        x_min_trunc = max(x_min, 0) 
-        if (x_max_trunc - x_min_trunc) / (x_max - x_min) < truncated_percent:
-            return None
-
-        y_max_trunc = min(y_max, width) 
-        y_min_trunc = max(y_min, 0) 
-        if (y_max_trunc - y_min_trunc) / (y_max - y_min) < truncated_percent:
-            return None
-        
-        return (0, x_min_trunc, y_min_trunc, x_max_trunc - x_min_trunc, y_max_trunc - y_min_trunc)
     
     def __init__(
             self,
