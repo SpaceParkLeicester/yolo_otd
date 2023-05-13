@@ -57,6 +57,7 @@ class airbus_clean_otd:
         self.labels.at[:,'aspect_ratio'] = self.labels[['height', 'width']].max(axis=1) / self.labels[['height', 'width']].min(axis=1)
         logger.info("Descriotion o the lables are as follows:")
         logger.info(f'{self.labels.describe()}')
+        return self.labels
 
         self.analysis = '''
         The analysis of the data provides some insights. 
@@ -88,10 +89,5 @@ class airbus_clean_otd:
 
         # inspect the values
         logger.info("After cleaning the labels are as follows")
-        logger.info(f"{cleaned_labels.describe()}")     
-
-if __name__ == "__main__":
-    airbus_dataset_path = '/home/vardh/apps/tmp/airbus/'
-    pd = airbus_clean_otd(airbus_dataset_path)
-    pd.annots_pd()
-    pd.clean_annots()
+        logger.info(f"{cleaned_labels.describe()}")  
+        return cleaned_labels   
