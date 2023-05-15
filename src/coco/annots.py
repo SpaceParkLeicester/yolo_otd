@@ -4,9 +4,11 @@
 """
 
 import os
-from pathlib import Path
+import json
 import random
+from pathlib import Path
 from PIL import Image
+from src.config import airbus_clean_otd 
 
 info = {
     "year": "2021", 
@@ -31,7 +33,7 @@ classes = {
 
 TRUNCATED_PERCENT = 0.3
 
-class dataset_to_coco:
+class dataset_to_coco(airbus_clean_otd):
     """Creating annotations in COCO format"""
     annotations_json = {"info": [],"licenses": [], "categories": [],"images": [],"annotations": []} 
 
@@ -56,8 +58,10 @@ class dataset_to_coco:
         
         return (0, x_min_trunc, y_min_trunc, x_max_trunc - x_min_trunc, y_max_trunc - y_min_trunc)
     
-    def __init__(self) -> None:
-        pass
+    def __init__(self, airbus_dataset_path: str = None) -> None:
+        super().__init__(airbus_dataset_path)
+        super().annots_pd()
+        self.clean_labels = super().clean_annots()
 
     def dataset_to_coco(
             self,
@@ -68,22 +72,66 @@ class dataset_to_coco:
                 image_patch_folder: Image patch folder
         """
         # Building basic annotation JSON dict
-        coco_annots_str = ['info', 'license', 'classes']
+        coco_annots_str = ['info', 'licenses', 'categories']
         coco_annots = [info, license, classes]
-        for i in range(coco_annots):
+        for i in range(len(coco_annots)):
             self.annotations_json[coco_annots_str[i]].append(coco_annots[i])
         
         image_patches = os.listdir(image_patch_folder)
         random_patch = random.choice(image_patches)
-        img = Image.open(random_patch)
+        image_path = os.path.join(image_patch_folder,random_patch)
+        img = Image.open(image_path)
         TILE_HEIGHT, TILE_WIDTH = img.size
 
-        for patch in image_patches:
-            patch_name = Path(patch).stem
+        for i in range(len(image_patches)):
+        # Add image to annotations JSON
+            image = {
+                "id": i, 
+                "license": 1, 
+                "file_name": str(os.path.join(image_patch_folder,image_patches[i])), 
+                "height": TILE_HEIGHT,
+                "width": TILE_WIDTH, 
+                "date_captured": ""
+            }        
+            self.annotations_json["images"].append(image)
+
+            patch_name = image_patches[i].split('.')[0]
             image_id, x_start, y_start = patch_name.split('_')
+            img_labels = self.clean_labels[self.clean_labels["image_id"] == image_id]
+            # Getting the bounds
             # Get annotations in tiles
-            found_ann = [
-                self.annot_is_inside_tile(bounds, x_start, y_start, TILE_WIDTH, TILE_HEIGHT, TRUNCATED_PERCENT)]            
+            found_ann = [self.annot_is_inside_tile(bounds, int(x_start), int(y_start), TILE_WIDTH, TILE_HEIGHT, TRUNCATED_PERCENT) for i, bounds in enumerate(img_labels['bounds'])]  
+            found_ann = [el for el in found_ann if el is not None]
+            # Add annotations to annotations JSON
+            # format: 0, x_min, y_min, b_width, b_height
+            for ann in found_ann:
+                ann_nb = 0
+                class_id, x_min, y_min, b_width, b_height = ann
+                image_annotations = {
+                    "id": ann_nb,
+                    "image_id": i,
+                    "category_id": class_id,
+                    "bbox": [x_min, y_min, b_width, b_height],
+                    "area": b_width * b_height,
+                    "segmentation": [],
+                    "iscrowd": 0
+                }
+                self.annotations_json["annotations"].append(image_annotations)
+                ann_nb += 1 
+
+        # save annotations in JSON file
+        parent_dir = Path(image_patch_folder).parents[0].as_posix()
+        set_name = image_patch_folder.split('/')[-1]
+        annots_json_path = os.path.join(parent_dir, f"{set_name}_annots.json")
+        with open(annots_json_path, 'w') as f:
+            output_json = json.dumps(self.annotations_json)
+            f.write(output_json)                   
 
 
+
+if __name__ == "__main__":
+    airbus_dataset_path = "/home/vardh/apps/tmp/airbus/"
+    image_patch_folder = '/home/vardh/apps/tmp/airbus/image_patches/valid'
+    coco = dataset_to_coco(airbus_dataset_path)
+    coco.dataset_to_coco(image_patch_folder)
 
