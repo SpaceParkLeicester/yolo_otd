@@ -58,9 +58,9 @@ def add_oil_to_coco(yolox_install_path:str = None):
     
     pipeline = Template(config_file_template).substitute(
         data_dir = os.getcwd(),
-        train_ann = os.path.join(os.getcwd(), 'data/train_annots.json'),
-        valid_ann = os.path.join(os.getcwd(), 'data/valid_annots.json'),
-        test_ann = os.path.join(os.getcwd(), 'data/test_annots.json'),
+        train_ann = os.path.join(os.getcwd(), 'data/splits/train_annots.json'),
+        valid_ann = os.path.join(os.getcwd(), 'data/splits/valid_annots.json'),
+        test_ann = os.path.join(os.getcwd(), 'data/splits/test_annots.json'),
         max_epoch = 10)
     with open(PIPELINE_CONFIG_PATH, 'w') as f:
         f.write(pipeline)

@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
-from src.annonts import airbus_clean_otd as clean
+from src.cfg import airbus_clean_otd as clean
 
 # Percentage to allocate to train, validation and test datasets
 train_ratio = 0.75
@@ -45,7 +45,7 @@ class test_train_val:
             self.saveList(test_ids, os.path.join(self.data_dir, 'test.txt'))
 
         else:
-            # Read spilts from previously saved files
+            # Read splits from previously saved files
             # This enables consistency when running multiple times.
             train_ids = np.loadtxt(os.path.join(self.data_dir, 'train.txt'), dtype=str)
             valid_ids = np.loadtxt(os.path.join(self.data_dir,'valid.txt'), dtype=str)

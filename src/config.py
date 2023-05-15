@@ -20,9 +20,9 @@ class Exp(MyExp):
         
         # Define yourself dataset path
         self.data_dir = "/home/vardh/gcp_projects/airbus-ml"
-        self.train_ann = "/home/vardh/gcp_projects/airbus-ml/data/train_annots.json"
-        self.val_ann = "/home/vardh/gcp_projects/airbus-ml/data/valid_annots.json"
-        self.test_ann = "/home/vardh/gcp_projects/airbus-ml/data/test_annots.json"
+        self.train_ann = "/home/vardh/gcp_projects/airbus-ml/data/splits/train_annots.json"
+        self.val_ann = "/home/vardh/gcp_projects/airbus-ml/data/splits/valid_annots.json"
+        self.test_ann = "/home/vardh/gcp_projects/airbus-ml/data/splits/test_annots.json"
 
         self.max_epoch = 10
         self.num_classes = 1

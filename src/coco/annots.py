@@ -8,7 +8,7 @@ import json
 import random
 from pathlib import Path
 from PIL import Image
-from src.config import airbus_clean_otd 
+from src.cfg import airbus_clean_otd 
 
 import logging
 from logging import config

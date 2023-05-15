@@ -11,6 +11,10 @@ export LD_LIBRARY_PATH=/usr/local/cuda-10.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRAR
 
 Make sure to run `environment.yml` to install all necessary packages, and the (YOLOX detection)[https://github.com/Megvii-BaseDetection/YOLOX] is adapted  from the given link, make sure to clone the repo and install it as editable. 
 
+and
+
+Download `https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_s.pth`
+
 ### Configuration
 
 Make sure to run the coco and configuration files as explained in the instructions, especially adding the "oil" in the `COCO` class pre-defined coco classes
