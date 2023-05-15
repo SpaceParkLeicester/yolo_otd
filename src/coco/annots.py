@@ -127,7 +127,7 @@ class dataset_to_coco(airbus_clean_otd):
         # save annotations in JSON file
         parent_dir = Path(image_patch_folder).parents[0].as_posix()
         set_name = image_patch_folder.split('/')[-1]
-        annots_json_path = os.path.join(parent_dir, f"{set_name}_annots.json")
+        annots_json_path = os.path.join("data/splits", f"{set_name}_annots.json")
         with open(annots_json_path, 'w') as f:
             output_json = json.dumps(self.annotations_json)
             f.write(output_json)
@@ -136,8 +136,11 @@ class dataset_to_coco(airbus_clean_otd):
 
 
 if __name__ == "__main__":
+    sets = ["train", "test", "valid"]
     airbus_dataset_path = "/home/vardh/apps/tmp/airbus/"
-    image_patch_folder = '/home/vardh/apps/tmp/airbus/image_patches/valid'
-    coco = dataset_to_coco(airbus_dataset_path)
-    coco.dataset_to_coco(image_patch_folder)
+
+    for i in sets:
+        image_patch_folder = f'/home/vardh/apps/tmp/airbus/image_patches/{i}'
+        coco = dataset_to_coco(airbus_dataset_path)
+        coco.dataset_to_coco(image_patch_folder)
 
