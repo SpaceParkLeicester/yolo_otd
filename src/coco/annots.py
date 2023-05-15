@@ -10,6 +10,11 @@ from pathlib import Path
 from PIL import Image
 from src.config import airbus_clean_otd 
 
+import logging
+from logging import config
+config.fileConfig('logger.ini')
+logger = logging.getLogger(__name__)
+
 info = {
     "year": "2021", 
     "version": "1", 
@@ -125,7 +130,8 @@ class dataset_to_coco(airbus_clean_otd):
         annots_json_path = os.path.join(parent_dir, f"{set_name}_annots.json")
         with open(annots_json_path, 'w') as f:
             output_json = json.dumps(self.annotations_json)
-            f.write(output_json)                   
+            f.write(output_json)
+        logger.info((f"{len(self.annotations_json['images'])} tiles saved under {parent_dir} as {set_name}_annots.json"))                   
 
 
 
