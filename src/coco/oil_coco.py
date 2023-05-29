@@ -66,5 +66,5 @@ def add_oil_to_coco(yolox_install_path:str = None):
         f.write(pipeline)
 
 if __name__ == "__main__":
-    yolox_install_path = '/home/vardh/apps/YOLO/'
+    yolox_install_path = os.environ.get('YOLOX')
     add_oil_to_coco(yolox_install_path)

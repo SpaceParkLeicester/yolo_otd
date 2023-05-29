@@ -85,8 +85,8 @@ if __name__ == "__main__":
             data = file.read().rsplit('\n')
         image_id_list = data[:-1]
 
-        large_image_folder = '/home/vardh/apps/tmp/airbus/images/'
-        destination_data_path = f'/home/vardh/apps/tmp/airbus/image_patches/{i.split(".")[0]}'
+        large_image_folder = os.path.join(os.environ.get('AIRBUS_SPOT'),'images')
+        destination_data_path = os.path.join(os.environ.get('AIRBUS_SPOT'), f'image_patches/{i.split(".")[0]}')
         if not os.path.isdir(destination_data_path):
             os.makedirs(destination_data_path)
         

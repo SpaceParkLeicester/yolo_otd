@@ -19,10 +19,10 @@ class Exp(MyExp):
         self.multiscale_range = 0
         
         # Define yourself dataset path
-        self.data_dir = "/home/vardh/gcp_projects/airbus-ml"
-        self.train_ann = "/home/vardh/gcp_projects/airbus-ml/data/splits/train_annots.json"
-        self.val_ann = "/home/vardh/gcp_projects/airbus-ml/data/splits/valid_annots.json"
-        self.test_ann = "/home/vardh/gcp_projects/airbus-ml/data/splits/test_annots.json"
+        self.data_dir = "."
+        self.train_ann = os.path.join(self.data_dir, "data/splits/train_annots.json")
+        self.val_ann = os.path.join(self.data_dir, "data/splits/valid_annots.json")
+        self.test_ann = os.path.join(self.data_dir, "data/splits/test_annots.json")
 
         self.max_epoch = 10
         self.num_classes = 1
