@@ -14,10 +14,10 @@ from logging import config
 config.fileConfig('logger.ini')
 logger = logging.getLogger(__name__)
 
-# Create 640 x 640 tiles with 64 pix overlap in /kaggle/working
-TILE_WIDTH = 640
-TILE_HEIGHT = 640
-TILE_OVERLAP = 64
+# Create tiles with pix overlap
+TILE_WIDTH = 512
+TILE_HEIGHT = 512
+TILE_OVERLAP = 0
 _overwriteFiles = True
 
 ann_nb = 0
