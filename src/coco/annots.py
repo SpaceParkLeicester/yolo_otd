@@ -137,10 +137,11 @@ class dataset_to_coco(airbus_clean_otd):
 
 if __name__ == "__main__":
     sets = ["train", "test", "valid"]
-    airbus_dataset_path = "/home/vardh/apps/tmp/airbus/"
+    airbus_dataset_path = os.environ.get('AIRBUS_SPOT')
+    airbus_image_patches = os.path.join(airbus_dataset_path, 'image_patches')
 
     for i in sets:
-        image_patch_folder = f'/home/vardh/apps/tmp/airbus/image_patches/{i}'
+        image_patch_folder = os.path.join(airbus_image_patches, i)
         coco = dataset_to_coco(airbus_dataset_path)
         coco.dataset_to_coco(image_patch_folder)
 

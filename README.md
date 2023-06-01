@@ -1,6 +1,6 @@
 # YOLO-Airbus Oil tank detection
 
-[Kaggle Notebook](https://www.kaggle.com/code/jeffaudi/oil-storage-detection-on-airbus-imagery-with-yolox/notebook)
+Modular implementation of [YOLOX](https://www.kaggle.com/code/jeffaudi/oil-storage-detection-on-airbus-imagery-with-yolox/notebook)
 
 ### Installation - Requirements
 
@@ -19,6 +19,7 @@ Download `https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1r
 
 Make sure to run the coco and configuration files as explained in the instructions, especially adding the "oil" in the `COCO` class pre-defined coco classes
 
-## Instructions of reproducing
-
-```splits.py--->tiles.py--->oil_coco.py--->annots.py```
+### Instructions of usage
+* Add `YOLOX` as env with path to [YOLOX detection](https://github.com/Megvii-BaseDetection/YOLOX)
+* Add `AIRBUS_SPOT` as env with path to Airbus imagery folder.
+```src/cfg/splits.py-->src/coco/tiles.py--->src/coco/oil_coco.py--->src/coco/annots.py```
