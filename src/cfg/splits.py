@@ -52,7 +52,8 @@ class test_train_val:
             test_ids = np.loadtxt(os.path.join(self.data_dir,'test.txt'), dtype=str)        
 
 if __name__ == "__main__":
-    airbus_dataset_path = '/home/vardh/apps/tmp/airbus/'
+    HOME_DIR = os.path.expanduser('~')
+    airbus_dataset_path = os.path.join(HOME_DIR,'apps/tmp/airbus/')
     data_dir = 'data/splits'
     clean_pd= clean(airbus_dataset_path)
     clean_pd.annots_pd()
